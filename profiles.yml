@@ -1,0 +1,27 @@
+t_retail:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('BQ_PROJECT_DEV') }}"
+      dataset: "{{ env_var('BQ_DATASET_DEV') }}"
+      threads: 4
+    test:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('BQ_PROJECT_TEST') }}"
+      dataset: "{{ env_var('BQ_DATASET_TEST') }}"
+      threads: 4
+    pprod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('BQ_PROJECT_PPROD') }}"
+      dataset: "{{ env_var('BQ_DATASET_PPROD') }}"
+      threads: 4
+    prod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('BQ_PROJECT_PROD') }}"
+      dataset: "{{ env_var('BQ_DATASET_PROD') }}"
+      threads: 4

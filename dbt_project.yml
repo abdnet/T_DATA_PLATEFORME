@@ -2,12 +2,12 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'T_RETAIL_PROJECT'
+name: 't_retail'
 version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 'T_RETAIL_PROJECT'
+profile: 't_retail'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -23,6 +23,13 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+vars:
+  DIM_DATE_START: '1990-01-01'
+  DIM_DATE_END: '2000-06-01'
+  batch_id: '{{invocation_id}}'
+  dbt_date:time_zone: 'Europe/Paris'
+
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -31,7 +38,37 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  T_RETAIL_PROJECT:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+  t_retail:
+    # Applies to all files under models/example/
+    +database:  BI_RETAIL_ANALYTICS
+    marts:
+      tags: ['mart']
+      +schema: reporting
+      # +pre-hook: 
+      #   # sql: '{{start__end__monitoring_local("START",this)}}'
+      # +post-hook: 
+      #     # sql: '{{start__end__monitoring_local("END",this)}}'
+      +materialized: table
+    staging:
+      tags: ['stg']
+      +schema:  staging
+      # +pre-hook: 
+      #   sql: '{{start__end__monitoring_local("START",this)}}'
+      # +post-hook: 
+      #     sql: '{{start__end__monitoring_local("END",this)}}'
+      +materialized:  view
+    objects:
+      +materialized:  table #ephemeral
+      tags: ['obj']
+      +schema:  object
+      # +pre-hook: 
+      #   # sql: '{{start__end__monitoring_local("START",this)}}'
+      # +post-hook: 
+      #     # sql: '{{start__end__monitoring_local("END",this)}}'
+    transforming:
+      +materialized: ephemeral
+      tags: ['trans']
+      # +pre-hook: 
+      #   # sql: '{{start__end__monitoring_local("START",this)}}'
+      # +post-hook: 
+      #     # sql: '{{start__end__monitoring_local("END",this)}}'
