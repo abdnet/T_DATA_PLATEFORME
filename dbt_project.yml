@@ -39,8 +39,9 @@ vars:
 # files using the `{{ config(...) }}` macro.
 models:
   t_retail:
+    +location: europe-west1
+
     # Applies to all files under models/example/
-    +database:  BI_RETAIL_ANALYTICS
     marts:
       tags: ['mart']
       +schema: reporting
@@ -51,7 +52,8 @@ models:
       +materialized: table
     staging:
       tags: ['stg']
-      +schema:  staging
+      +schema:  staging_marketing
+
       # +pre-hook: 
       #   sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook: 
@@ -60,7 +62,7 @@ models:
     objects:
       +materialized:  table #ephemeral
       tags: ['obj']
-      +schema:  object
+      +schema:  reporting_marketing
       # +pre-hook: 
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook: 
