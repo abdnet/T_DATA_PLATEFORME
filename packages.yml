@@ -1,10 +1,10 @@
 packages:
   - package: dbt-labs/dbt_utils
-    version: ^1.0.0  # Consider using the latest patch version (e.g., ^1.0.3)
+    version: 1.1.1  # Consider using the latest patch version (e.g., ^1.0.3)
   # - package: dbt-labs/audit_helper
   #   version: ^0.13.0  # Major update for dbt 1.0+ compatibility
-  # - package: calogica/dbt_expectations
-  #   version: ^0.14.1  # Major update for dbt 1.0+ compatibility
+  - package: calogica/dbt_expectations
+    version: 0.10.3
   # - package: EqualExperts/dbt_unit_testing
   #   version: ^0.3.1  # Potential updates for dbt 1.8 compatibility
   # - package: dbt-labs/codegen
