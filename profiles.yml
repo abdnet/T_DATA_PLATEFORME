@@ -1,35 +1,20 @@
-t_retail:
+T_DATA_PLATFORM:
   target: dev
   outputs:
     dev:
-      type: bigquery
-      method: oauth
-      project: "data-plateforme-423614"
-      dataset: "marketing"
-      # dataset: "{{ env_var('BQ_DATASET_DEV') }}"
-      threads: 4
-      location: europe-west1
+      type: snowflake
+      account: khwrkrv-ku13850
+      user: USR_DBT_SRV_DEV
+      
+      private_key_path: /home/djawed/workspace/dbt_user_secret_key/rsa_key.p8
+      private_key_passphrase: oObbBTDSMjwLLKWZiaexaIdXQ
 
-    test:
-      type: bigquery
-      method: oauth
-      project: "{{ env_var('BQ_PROJECT_TEST') }}"
-      dataset: "{{ env_var('BQ_DATASET_TEST') }}"
-      threads: 4
-      location: europe-west1
+      role: accountadmin
+      database: marketing
+      warehouse: compute_wh
+      schema: DEV_ANALYTICS
+      threads: 10
+      client_session_keep_alive: False
+      query_tag: DBT_ENV_DEV
 
-    pprod:
-      type: bigquery
-      method: oauth
-      project: "{{ env_var('BQ_PROJECT_PPROD') }}"
-      dataset: "{{ env_var('BQ_DATASET_PPROD') }}"
-      threads: 4
-      location: europe-west1
-
-    prod:
-      type: bigquery
-      method: oauth
-      project: "{{ env_var('BQ_PROJECT_PROD') }}"
-      dataset: "{{ env_var('BQ_DATASET_PROD') }}"
-      threads: 4
-      location: europe-west1
+    

@@ -1,13 +1,12 @@
-
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 't_retail'
+name: 'T_DATA_PLATFORM'
 version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-profile: 't_retail'
+profile: 'T_DATA_PLATFORM'
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -38,28 +37,26 @@ vars:
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  t_retail:
-    +location: europe-west1
+  T_DATA_PLATFORM:
 
     # Applies to all files under models/example/
-    marts:
-      tags: ['mart']
-      +schema: reporting
-      # +pre-hook: 
-      #   # sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
-      #     # sql: '{{start__end__monitoring_local("END",this)}}'
-      +materialized: table
-    staging:
+    100-staging:
       tags: ['stg']
-      +schema:  staging_marketing
+      +schema:  DEV_ANALYTICS
 
       # +pre-hook: 
       #   sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook: 
       #     sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized:  view
-    objects:
+    200-transforming:
+      +materialized: ephemeral
+      tags: ['trans']
+      # +pre-hook: 
+      #   # sql: '{{start__end__monitoring_local("START",this)}}'
+      # +post-hook: 
+      #     # sql: '{{start__end__monitoring_local("END",this)}}'  
+    300-objects:
       +materialized:  table #ephemeral
       tags: ['obj']
       +schema:  reporting_marketing
@@ -67,10 +64,11 @@ models:
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook: 
       #     # sql: '{{start__end__monitoring_local("END",this)}}'
-    transforming:
-      +materialized: ephemeral
-      tags: ['trans']
+    400-marts:
+      tags: ['mart']
+      +schema: reporting
       # +pre-hook: 
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook: 
       #     # sql: '{{start__end__monitoring_local("END",this)}}'
+      +materialized: table
