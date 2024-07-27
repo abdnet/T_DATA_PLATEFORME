@@ -3,18 +3,13 @@ T_DATA_PLATFORM:
   outputs:
     dev:
       type: snowflake
-      account: khwrkrv-ku13850
-      user: USR_DBT_SRV_DEV
-      
-      private_key_path: /home/djawed/workspace/dbt_user_secret_key/rsa_key.p8
-      private_key_passphrase: oObbBTDSMjwLLKWZiaexaIdXQ
-
-      role: accountadmin
-      database: marketing
-      warehouse: compute_wh
-      schema: DEV_ANALYTICS
-      threads: 10
-      client_session_keep_alive: False
-      query_tag: DBT_ENV_DEV
-
-    
+      account: "{{ env_var('DBT_ACCOUNT') }}"
+      user: "{{ env_var('DBT_USER') }}"
+      private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
+      role: "{{ env_var('DBT_ROLE') }}"
+      database: "{{ env_var('DBT_DATABASE') }}"
+      warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
+      schema: "{{ env_var('DBT_SCHEMA') }}"
+      threads: "{{ env_var('DBT_THREADS') |as_number }}"
+      client_session_keep_alive: "{{ env_var('DBT_CLIENT_SESSION_KEEP_ALIVE') |as_bool}}"
+      query_tag: "{{ env_var('DBT_QUERY_TAG') }}"
