@@ -1,62 +1,36 @@
+-- Source
+WITH src_customers AS (
+    SELECT {{ get_columns_by_relation(ref("stg_customers"), ["NAME"])  }}, NAME AS CUSTOMER_NAME FROM ref("stg_customers")
+),
 
--- SOURCE
-with
-    source as (select * from {{ ref( "stg_customers") }}),
-    orders as (select * from {{ ref("stg_orders") }}),
+src_orders AS (
+    SELECT {{ get_columns_by_relation(ref("stg_orders")) }} FROM ref("stg_orders")
+),
 
-    stats_by_customer as (select * from {{ ref("trans_orders_calcul_stat") }}),
+step_avoid_spaces AS (
+    SELECT {{ avoid_spaces(ref("stg_customers"), ["POSTAL_CODE","UPLOADED_AT","NAME"]) }},
+           POSTAL_CODE,
+           CUSTOMER_NAME,
+           UPLOADED_AT
+    FROM src_customers
+),
 
-    -- END SOURCES
-    -- Transformations
-    step_renaming as (
+step_split_name AS (
+    SELECT {{ get_columns_by_relation(ref("stg_customers"), ["CUSTOMER_NAME"]) }}, 
+           split_part(CUSTOMER_NAME, ' ', 0) AS FIRST_NAME,
+           split_part(CUSTOMER_NAME, ' ', 1) AS LAST_NAME
+    FROM avoid_spaces     
+),
+
+step_calcul_customerorder_stats as (
 
         select
-            id as customer_id,
-            {{ dbt.split_part("name", "' '", 1) }} as first_name,
-            {{ dbt.split_part("name", "' '", 2) }} as last_name,
-            (select current_timestamp)::timestamp as loaded_at
-        from source
-    ),
+            customer_id,
+            min(ordered_at) as first_order,
+            max(ordered_at) as last_order,
+            count(customer_id) as total_orders
+        from src_orders
+        group by 1
+)
 
-    step_join as (
-
-        select c.*, stats.*
-        from step_renaming as c
-        right join stats_by_customer as stats on id = c.customer_id
-    ),
-
-    -- add a random date column
-    row_numbers as (
-        select c.*, row_number() over (order by customer_id) as row_num
-        from step_join as c
-    ),
-    date_generator as (
-        select
-            row_num,
-            dateadd('week', row_num*2, '1950-01-01') as date_day
-        from row_numbers
-    ),
-    joined_data as (
-        select c.*,
-         d.date_day as birthday
-        from row_numbers as c
-        join date_generator as d on c.row_num = d.row_num
-    ),
-    -- END tranformations
-    -- return 
-    final as (
-        select 
-           customer_id as id,
-           first_name,
-           last_name,
-           birthday,
-           first_order,
-           last_order,
-           total_orders 
-         from joined_data
-    -- order by total_orders
-    )
-
-select *
-from final
-order by random()
+SELECT * FROM step_split_name
