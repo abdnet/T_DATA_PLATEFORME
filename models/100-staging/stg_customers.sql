@@ -1,9 +1,1 @@
-with
-    source as (select * from {{ source("SOURCE_API", "SRC_CUSTOMERS") }}),
-
-    renamed as (select * from source),
-
-    final as (select * from renamed)
-
-select *
-from final
+{{generate_stg_model("SOURCE_API", "SRC_CUSTOMERS")}}

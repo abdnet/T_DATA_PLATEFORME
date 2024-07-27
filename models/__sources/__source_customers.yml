@@ -2,8 +2,8 @@ version: 2
 
 sources:
   - name: SOURCE_API
-    database: data-plateforme-423614
-    schema: marketing
+    database: marketing
+    schema: DEV_TRANSACTIONAL_DB
     tables:
       - name: SRC_CUSTOMERS
         description: One record per customer. Includes information about customers.
