@@ -2,10 +2,10 @@ version: 2
 
 sources:
   - name: SOURCE_API
-    database: marketing
-    schema: DEV_TRANSACTIONAL_DB
+    database: MARKETING_TRANSAC_BD
+    schema: PUBLIC
     tables:
-      - name: SRC_CUSTOMERS
+      - name: CUSTOMERS
         description: One record per customer. Includes information about customers.
 
 # models:

@@ -6,6 +6,7 @@ T_DATA_PLATFORM:
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
       private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
+      private_key_passphrase: "{{env_var('DBT_PRIVATE_KEY_PASSPHRASE')}}"
       role: "{{ env_var('DBT_ROLE') }}"
       database: "{{ env_var('DBT_DATABASE') }}"
       warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
