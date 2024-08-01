@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: SOURCE_API
     database: marketing 
-    schema: DEV_TRANSACTIONAL_DB
+    schema: DPF_RAW_{{target.name|upper}}
     tables:
       - name: SRC_ORDERS
         description: One record per order. Includes cancelled and deleted orders.
