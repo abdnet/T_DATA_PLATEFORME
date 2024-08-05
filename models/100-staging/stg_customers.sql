@@ -120,7 +120,7 @@ step__renamed AS (
         FROM step__converted
 ),
 
-fianl AS(
+final AS(
     SELECT
             ID,
             CUSTOMER_ID,
@@ -139,6 +139,6 @@ fianl AS(
 )
 
 
-select * from fianl
+select * from final
  
    

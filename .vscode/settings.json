@@ -1,5 +1,4 @@
 {
     "dbt.enableNewLineagePanel": true,
-    "dbt.perspectiveTheme": "Pro Dark",
-    "dbt.queryLimit": 100
+    "dbt.perspectiveTheme": "Vintage"
 }
