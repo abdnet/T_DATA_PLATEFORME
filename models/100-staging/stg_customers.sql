@@ -30,14 +30,14 @@ step__valid_row AS(
     ),
 
 step__row_duplicated AS(
-           SELECT {{get_columns_by_relation(ref("raw_customers"))}},            
+           SELECT {{get_columns_by_relation(ref("raw_customers"))}},
            ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID ORDER BY UPLOADED_AT DESC) AS rn
            FROM step__valid_row
            QUALIFY rn = 1
 ),
 
 step__avoid_space AS(
-        SELECT 
+        SELECT
             {{avoid_spaces(ref("raw_customers"),['BIRTHDAY','UPLOADED_AT','POSTAL_CODE'])}},
             BIRTHDAY,
             UPLOADED_AT,
@@ -55,7 +55,7 @@ step__imputed AS (
                 WHEN SEX IN ('F', 'M') THEN SEX
                 ELSE 'X' -- Valeur par défaut pour les valeurs invalides
             END AS SEX,
-            COALESCE(COUNTRY, 'UNKNOWN') AS COUNTRY,            
+            COALESCE(COUNTRY, 'UNKNOWN') AS COUNTRY,
             COALESCE(REGION, 'UNKNOWN') AS REGION,
             COALESCE(CITY, 'UNKNOWN') AS CITY,
             COALESCE(POSTAL_CODE, '0') AS POSTAL_CODE,
@@ -120,7 +120,7 @@ step__renamed AS (
         FROM step__converted
 ),
 
-fianl AS(
+final AS(
     SELECT
             ID,
             CUSTOMER_ID,
@@ -139,6 +139,4 @@ fianl AS(
 )
 
 
-select * from fianl
- 
-   
+select * from final

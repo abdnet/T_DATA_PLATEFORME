@@ -20,7 +20,7 @@ snapshot-paths: ["snapshots"]
 
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
-  - "dbt_packages"
+  # - "dbt_packages"
 
 vars:
   DIM_DATE_START: '1990-01-01'
@@ -43,40 +43,40 @@ models:
     000-raw:
       tags: ['raw']
       +schema: DPF_SCH_RAW_{{target.name|upper}}
-      # +pre-hook: 
+      # +pre-hook:
       #   sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
+      # +post-hook:
       #     sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized:  table
     100-staging:
       tags: ['stg']
       +schema: DPF_STG_{{target.name|upper}}
 
-      # +pre-hook: 
+      # +pre-hook:
       #   sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
+      # +post-hook:
       #     sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized:  table
     200-transforming:
       +materialized: ephemeral
       tags: ['trans']
-      # +pre-hook: 
+      # +pre-hook:
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
-      #     # sql: '{{start__end__monitoring_local("END",this)}}'  
+      # +post-hook:
+      #     # sql: '{{start__end__monitoring_local("END",this)}}'
     300-objects:
       +materialized:  table #ephemeral
       tags: ['obj']
       +schema:  reporting_marketing
-      # +pre-hook: 
+      # +pre-hook:
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
+      # +post-hook:
       #     # sql: '{{start__end__monitoring_local("END",this)}}'
     400-marts:
       tags: ['mart']
       +schema: reporting
-      # +pre-hook: 
+      # +pre-hook:
       #   # sql: '{{start__end__monitoring_local("START",this)}}'
-      # +post-hook: 
+      # +post-hook:
       #     # sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized: table
