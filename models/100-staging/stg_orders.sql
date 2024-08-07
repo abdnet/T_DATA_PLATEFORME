@@ -17,20 +17,20 @@ step__valid_row AS(
 	        TOTAL_PRICE,
 	        UPLOADED_AT,
 	        SOURCE,
-	        EVENT_TYPE 
+	        EVENT_TYPE
         FROM source
         WHERE  {{ not_null_proportion(['CUSTOMER_ID', 'ORDER_ID', 'STORE_ID','SALESCHANNELID','DATE_ORDER' ], 0.8) }}
     ),
 
 step__row_duplicated AS(
-           SELECT {{get_columns_by_relation(ref("raw_orders"))}},            
+           SELECT {{get_columns_by_relation(ref("raw_orders"))}},
            ROW_NUMBER() OVER (PARTITION BY ORDER_ID, CUSTOMER_ID ORDER BY UPLOADED_AT DESC) AS rn
            FROM step__valid_row
            QUALIFY rn = 1
 ),
 
 step__avoid_space AS(
-        SELECT 
+        SELECT
             {{avoid_spaces(ref("raw_orders"),['DATE_ORDER','DATE_DELIVERY','DATE_RETURN','TOTAL_PRICE','UPLOADED_AT'])}},
             DATE_ORDER,
 	        DATE_DELIVERY,
@@ -124,5 +124,3 @@ final AS(
 
 
 select * from final
- 
-   
