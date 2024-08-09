@@ -1,0 +1,73 @@
+version: 2     
+models:
+  - name: stg_customers
+    description: One record per customer. Includes information about customers.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_customers')
+          name: QUALITY_DIM_COMPLETENESS_CUSTOMERS
+          config:
+            severity: warn
+
+    columns:
+      - name: CUSTOMER_ID
+        description: "Primary key of the customers table."
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_ID
+      - name: NAME
+        description: "Customer's name"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_NAME
+      - name: BIRTHDAY
+        description: "Date of birth of the customer."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_BIRTHDAY
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_BIRTHDAY
+              expression: "<=current_date"
+      - name: SEX
+        description: "Customer's gender"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_SEX
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['F','M','UNKNOWN']
+      - name: EMAIL
+        description: "Customer's email address"
+        # tests:
+        #   - dbt_expectations.expect_column_values_to_match_regex:
+        #       regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+
+      - name: COUNTRY
+        description: "Customer's country"
+
+      - name: REGION
+        description: "Customer's region"
+
+      - name: CITY
+        description: "Customer's city"
+      
+      - name: POSTAL_CODE
+        description: "Customer's postal code"
+      
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded"
+      
+      - name: SOURCE
+        description: "Source of the data"
+      
+      - name: EVENT_TYPE
+        description: "Type of event associated with the data"
+          

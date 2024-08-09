@@ -1,79 +1,50 @@
 version: 2
 
 sources:
-  - name: SOURCE_API
+  - name: PUBLIC
     database: MARKETING_TRANSAC_BD
-    schema: PUBLIC
+   
+    # schema: PUBLIC
     tables:
       - name: CUSTOMERS
+        tests:
+        - dbt_expectations.expect_table_columns_to_match_set:
+            column_list: ["ID", "CUSTOMER_ID","TEST_COL2","NAME","BIRTHDAY","SEX","EMAIL","COUNTRY","REGION","CITY","POSTAL_CODE","UPLOADED_AT","SOURCE","EVENT_TYPE","col1"]
+            transform: upper # (Optional)
         description: One record per customer. Includes information about customers.
+        columns:
+          - name: CUSTOMER_ID
+            description: "Primary key of the customers table."
 
-# models:
-#   - name: customers
-#     description: One record per customer. Includes information about customers.
-#     tests:
-#       - dbt_utils.equal_rowcount:
-#           compare_model: ref('stg_customers')
-#           name: QUALITY_DIM_COMPLETENESS_CUSTOMERS
-#           config:
-#             severity: warn
+          - name: NAME
+            description: "Customer's name"
 
-#     columns:
-#       - name: id
-#         description: "Primary key of the customers table."
-#         tests:
-#           - unique
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_of_type:
-#               column_type: VARCHAR
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_ID
-#       - name: first_name
-#         description: "First name of the customer."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_of_type:
-#               column_type: VARCHAR
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_FIRST_NAME
-#       - name: last_name
-#         description: "Last name of the customer."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_of_type:
-#               column_type: VARCHAR
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_LAST_NAME
-#       - name: birthday
-#         description: "Date of birth of the customer."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_in_type_list:
-#               column_type_list: [date, datetime, TIMESTAMP_NTZ]
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_BIRTHDAY
-#           - dbt_utils.expression_is_true:
-#               name: QUALITY_CONSISTENCY_CUSTOMERS_LAST_ORDER_LTE_FIRST_ORDERS
-#               expression: "<=current_date"
-#       - name: first_order
-#         description: "Date of the customer's first order."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_in_type_list:
-#               column_type_list: [date, datetime, TIMESTAMP_NTZ]
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_FIRST_ORDERS
+          - name: BIRTHDAY
+            description: "Date of birth of the customer."
+            
+          - name: SEX
+            description: "Customer's gender"
+            
+          - name: EMAIL
+            description: "Customer's email address"
+          
+          - name: COUNTRY
+            description: "Customer's country"
 
-#       - name: last_order
-#         description: "Date of the customer's last order."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_in_type_list:
-#               column_type_list: [date, datetime, TIMESTAMP_NTZ]
-#               name: QUALITY_DIM_VALIDITY
-#           - dbt_utils.expression_is_true:
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_LAST_ORDERS
-#               expression: ">=first_order"
+          - name: REGION
+            description: "Customer's region"
 
-#       - name: total_orders
-#         description: "Total number of orders placed by the customer."
-#         tests:
-#           - not_null
-#           - dbt_expectations.expect_column_values_to_be_of_type:
-#               column_type: NUMBER
-#               name: QUALITY_DIM_VALIDITY_CUSTOMERS_TOTAL_ORDERS
+          - name: CITY
+            description: "Customer's city"
+          
+          - name: POSTAL_CODE
+            description: "Customer's postal code"
+          
+          - name: UPLOADED_AT
+            description: "Timestamp when the record was uploaded"
+          
+          - name: SOURCE
+            description: "Source of the data"
+          
+          - name: EVENT_TYPE
+            description: "Type of event associated with the data"
