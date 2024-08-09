@@ -61,3 +61,30 @@
     {%- set sql_condition = "(" ~ case_sum ~ ") >= " ~ threshold_rounded -%}
     {{ sql_condition | trim }}
 {%- endmacro -%}
+
+{% macro get_columns(model_ref) %}
+
+    {% set ephemeral_sql %}
+        SELECT *
+        FROM {{ model_ref }}
+    {% endset %}
+
+    {{ log(ephemeral_sql, info=True) }}
+
+    {% set columns_query %}
+        WITH cte AS ({{ ephemeral_sql }})
+        SELECT * FROM cte LIMIT 0
+    {% endset %}
+    {{ log(columns_query, info=True) }}
+
+    {% set results = run_query(columns_query) %}
+    {% set columns = [] %}
+
+    {% for column in results.columns %}
+        {% do columns.append(column.name) %}
+    {% endfor %}
+    {{ log(columns, info=True) }}
+
+    {{ columns | join(', ') }}
+{% endmacro %}
+

@@ -1,1 +1,1 @@
-{{ mirror_raw('SOURCE_API','ORDERS') }}
+{{ mirror_raw('PUBLIC','ORDERS') }}

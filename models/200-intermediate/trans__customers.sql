@@ -22,21 +22,7 @@ step__calculate_new_fields AS ( -- REF = [RG_001, RG_004]
     LEFT JOIN ref_country r
     ON UPPER(c.COUNTRY) = UPPER(r.name)
 ),
--- step__calcul_customer_order_stats AS (
---         SELECT
---             CUSTOMER_ID,
---             min(ORDER_DATE) AS FIRST_ORDER,
---             max(ORDER_DATE) AS LAST_ORDER,
---             count(CUSTOMER_ID) AS TOTAL_ORDERS
---         FROM src_orders
---         GROUP BY 1
--- ),
--- step__add_stat_columns AS (
---         SELECT s.*, c.FIRST_ORDER, c.LAST_ORDER, c.TOTAL_ORDERS
---         FROM step__calculate_new_fields AS s
---         LEFT JOIN step__calcul_customer_order_stats AS c
---         ON s.CUSTOMER_ID = c.CUSTOMER_ID
--- ),
+
 step__rename AS (
         SELECT * FROM step__calculate_new_fields
 ),

@@ -30,10 +30,13 @@ step__valid_row AS(
     ),
 
 step__row_duplicated AS(
-           SELECT {{get_columns_by_relation(ref("raw_customers"))}},
-           ROW_NUMBER() OVER (PARTITION BY CUSTOMER_ID ORDER BY UPLOADED_AT DESC) AS rn
-           FROM step__valid_row
-           QUALIFY rn = 1
+   
+           {{ dbt_utils.deduplicate(
+                relation=ref("raw_customers"),
+                partition_by='CUSTOMER_ID',
+                order_by="UPLOADED_AT desc",
+            )
+         }}
 ),
 
 step__avoid_space AS(
