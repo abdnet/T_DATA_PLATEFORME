@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: SOURCE_API
+  - name: PUBLIC
     database: MARKETING_TRANSAC_BD
-    schema: PUBLIC
+    # schema: PUBLIC
     tables:
       - name: ORDERS
         description: One record per order. Includes cancelled and deleted orders.
