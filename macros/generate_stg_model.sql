@@ -9,7 +9,7 @@
         {%- for column in columns %}
             {{ column }}{{ "," if not loop.last }}
         {%- endfor %}
-        FROM {{ source_ref}}
+        FROM {{ source_ref }}
     )
 
     SELECT
