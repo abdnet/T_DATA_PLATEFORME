@@ -1,6 +1,7 @@
 {{ config(
-    materialized = 'view',
-    unique_key = 'CUSTOMER_ID'
+    materialized = 'incremental',
+    unique_key = 'CUSTOMER_ID',
+    query_tag = 'dbt_special'
 ) }}
 
 
@@ -23,6 +24,7 @@ step__valid_row AS(
             POSTAL_CODE,
             BIRTHDAY,
             UPLOADED_AT,
+            UPDATED_AT,
             SOURCE,
             EVENT_TYPE
         FROM source
@@ -41,9 +43,10 @@ step__row_duplicated AS(
 
 step__avoid_space AS(
         SELECT
-            {{avoid_spaces(ref("raw_customers"),['BIRTHDAY','UPLOADED_AT','POSTAL_CODE'])}},
+            {{avoid_spaces(ref("raw_customers"),['BIRTHDAY','UPLOADED_AT','UPDATED_AT','POSTAL_CODE'])}},
             BIRTHDAY,
             UPLOADED_AT,
+            UPDATED_AT,
             POSTAL_CODE
         FROM step__row_duplicated
 ),
@@ -64,6 +67,7 @@ step__imputed AS (
             COALESCE(POSTAL_CODE, '0') AS POSTAL_CODE,
             COALESCE(BIRTHDAY, '1900-01-01') AS BIRTHDAY,
             COALESCE(UPLOADED_AT, '1900-01-01') AS UPLOADED_AT,
+            COALESCE(UPDATED_AT, '1900-01-01') AS UPDATED_AT,
             SOURCE,
             EVENT_TYPE
         FROM step__avoid_space
@@ -80,7 +84,8 @@ step__standardized AS(
             INITCAP(CITY) AS CITY,
             POSTAL_CODE,
             TO_DATE(BIRTHDAY) AS BIRTHDAY,
-            TO_DATE(UPLOADED_AT) AS UPLOADED_AT,
+            UPLOADED_AT,
+            UPDATED_AT,
             SOURCE,
             EVENT_TYPE
         FROM step__imputed
@@ -98,7 +103,8 @@ step__converted AS (
             CITY::VARCHAR(100) AS CITY,
             POSTAL_CODE::NUMBER(5,0)  AS POSTAL_CODE,
             BIRTHDAY::DATE AS BIRTHDAY,
-            UPLOADED_AT::TIMESTAMP AS UPLOADED_AT,
+            UPLOADED_AT::TIMESTAMP_NTZ AS UPLOADED_AT,
+            UPDATED_AT::TIMESTAMP_NTZ AS UPDATED_AT, 
             SOURCE::VARCHAR(25) AS SOURCE,
             EVENT_TYPE::VARCHAR(25) AS EVENT_TYPE
 
@@ -118,6 +124,7 @@ step__renamed AS (
             POSTAL_CODE,
             BIRTHDAY,
             UPLOADED_AT,
+            UPDATED_AT,
             SOURCE,
             EVENT_TYPE
         FROM step__converted
@@ -136,10 +143,16 @@ final AS(
             POSTAL_CODE,
             BIRTHDAY,
             UPLOADED_AT,
+            UPDATED_AT,
             SOURCE,
-            EVENT_TYPE
-        FROM step__renamed
+            EVENT_TYPE,
+            TIMESTAMPADD('hour', 9, CURRENT_TIMESTAMP()::TIMESTAMP_NTZ) AS DBT_UPDATED_AT
+    FROM step__renamed
 )
 
+SELECT * FROM final
 
-select * from final
+{% if is_incremental() %}
+where UPLOADED_AT >= (select COALESCE(max(DBT_UPDATED_AT),'1900-01-01') from {{ this }})   
+OR UPDATED_AT >= (select COALESCE(max(DBT_UPDATED_AT),'1900-01-01') from {{ this }})    
+{% endif %}
