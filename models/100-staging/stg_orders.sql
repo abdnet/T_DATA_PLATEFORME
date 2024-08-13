@@ -1,3 +1,8 @@
+{{ config(
+    materialized = 'incremental',
+    unique_key = 'ORDER_ID'
+) }}
+
 WITH source AS (
         SELECT
             {{get_columns_by_relation(ref("raw_orders"))}}
@@ -23,10 +28,12 @@ step__valid_row AS(
     ),
 
 step__row_duplicated AS(
-           SELECT {{get_columns_by_relation(ref("raw_orders"))}},
-           ROW_NUMBER() OVER (PARTITION BY ORDER_ID, CUSTOMER_ID ORDER BY UPLOADED_AT DESC) AS rn
-           FROM step__valid_row
-           QUALIFY rn = 1
+           {{ dbt_utils.deduplicate(
+                relation=ref("raw_orders"),
+                partition_by='ORDER_ID',
+                order_by="UPLOADED_AT desc",
+            )
+           }}
 ),
 
 step__avoid_space AS(
@@ -118,9 +125,14 @@ final AS(
             RETURN_DATE,
             UPLOADED_AT,
             SOURCE,
-            EVENT_TYPE
-        FROM step__renamed
+            EVENT_TYPE,
+            CURRENT_TIMESTAMP AS DBT_UPDATED_AT
+    FROM step__renamed
 )
 
+SELECT * FROM final
 
-select * from final
+{% if is_incremental() %}
+where UPLOADED_AT >= (select max(DBT_UPDATED_AT) from {{ this }})    
+{% endif %}
+
