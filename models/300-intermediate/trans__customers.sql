@@ -1,10 +1,10 @@
 -- Source
 WITH src_customers AS (
-    SELECT {{ get_columns_by_relation(ref("stg_customers"), ["NAME"])  }}, NAME AS CUSTOMER_NAME FROM {{ref("stg_customers")}}
+    SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"])  }}, NAME AS CUSTOMER_NAME FROM {{ref("customer_history")}} WHERE DBT_VALID_TO IS NULL
 ),
 
 src_orders AS (
-    SELECT {{ get_columns_by_relation(ref("stg_orders")) }} FROM {{ref("stg_orders")}}
+    SELECT {{ get_columns_by_relation(ref("order_history")) }} FROM {{ref("order_history")}} WHERE DBT_VALID_TO IS NULL
 ),
 -- Referential
 ref_country AS (
@@ -12,7 +12,7 @@ ref_country AS (
 ),
 -- Transformation
 step__calculate_new_fields AS ( -- REF = [RG_001, RG_004]
-    SELECT {{ get_columns_by_relation(ref("stg_customers"), ["NAME"]) }},
+    SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"]) }},
            split_part(CUSTOMER_NAME, ' ', 0) AS FIRST_NAME,
            split_part(CUSTOMER_NAME, ' ', 1) AS LAST_NAME,
            r.alpha_2 AS COUNTRY_CODE,

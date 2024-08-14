@@ -1,0 +1,102 @@
+version: 2     
+models:
+  - name: stg_customers
+    description: One record per customer. Includes information about customers.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_customers')
+          name: QUALITY_DIM_COMPLETENESS_CUSTOMERS
+          config:
+            severity: warn
+
+    columns:
+      - name: CUSTOMER_ID
+        description: "Primary key of the customers table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_ID
+      
+      - name: NAME
+        description: "Customer's name"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_NAME
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              max_value: 100 # (Optional)
+              strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
+              name: QUALITY_DIM_CONFORMITY_CUSTOMERS_NAME
+      
+      - name: BIRTHDAY
+        description: "Date of birth of the customer."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_BIRTHDAY
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_BIRTHDAY
+              expression: "<= DATEADD(YEAR, -18, CURRENT_DATE)"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+      
+      - name: SEX
+        description: "Customer's gender"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_SEX
+          - dbt_expectations.expect_column_values_to_be_in_set:
+              value_set: ['F','M','X']
+              name: QUALITY_DIM_CONFORMITY_CUSTOMERS_SEX
+      
+      - name: EMAIL
+        description: "Customer's email address"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_match_regex:
+              regex: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_EMAIL
+
+      - name: COUNTRY
+        description: "Customer's country"
+
+      - name: REGION
+        description: "Customer's region"
+
+      - name: CITY
+        description: "Customer's city"
+      
+      - name: POSTAL_CODE
+        description: "Customer's postal code"
+      
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT  
+        description: "Timestamp when the record was updated"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+          

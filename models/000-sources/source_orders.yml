@@ -1,0 +1,73 @@
+version: 2
+
+sources:
+  - name: PUBLIC
+    database: MARKETING_TRANSAC_BD
+    description: This is a replica of the data pushed by our api 
+    # schema: PUBLIC
+    tables:
+      - name: ORDERS
+        description: One record per order. Includes cancelled and deleted orders.
+        freshness:
+              warn_after: {count: 1, period: day }
+              error_after: {count: 3, period: day }
+        loaded_at_field: UPLOADED_AT
+        columns:
+          - name: ORDER_ID
+            description: Primary key of the orders table
+            data_tests:
+              - unique
+              - not_null
+
+          - name: CUSTOMER_ID
+            description: Foreign key referencing the customer who placed the order
+            data_tests:
+              - not_null
+              
+          - name: STORE_ID
+            description: Foreign key referencing the store where the order was placed
+            data_tests:
+              - not_null
+              
+          - name: SALESCHANNELID
+            description: Foreign key referencing the sales channel where the order was placed
+            data_tests:
+              - not_null
+
+          - name: DATE_ORDER
+            description: Timestamp when the order was placed
+            data_tests:
+              - not_null
+
+          - name: DATE_DELIVERY
+            description: Timestamp when the order was delivered
+            data_tests:
+              - not_null
+
+          - name: DATE_RETURN
+            description: Timestamp when the order was returned
+
+          - name: TOTAL_PRICE
+            description: Total price for the order
+            data_tests:
+              - not_null
+
+          - name: UPLOADED_AT
+            description: "Timestamp when the record was uploaded"
+            data_tests:
+              - not_null     
+
+          - name: UPDATED_AT  
+            description: "Timestamp when the record was updated"
+            data_tests:
+              - not_null  
+
+          - name: SOURCE
+            description: "Source of the data"
+            data_tests:
+              - not_null
+
+          - name: EVENT_TYPE
+            description: "Type of event associated with the data"
+            data_tests:
+              - not_null

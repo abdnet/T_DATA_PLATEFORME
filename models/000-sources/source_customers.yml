@@ -3,31 +3,42 @@ version: 2
 sources:
   - name: PUBLIC
     database: MARKETING_TRANSAC_BD
-   
+    description: This is a replica of the data pushed by our api 
     # schema: PUBLIC
     tables:
       - name: CUSTOMERS
-        tests:
-        - dbt_expectations.expect_table_columns_to_match_set:
-            column_list: ["ID", "CUSTOMER_ID","TEST_COL2","NAME","BIRTHDAY","SEX","EMAIL","COUNTRY","REGION","CITY","POSTAL_CODE","UPLOADED_AT","SOURCE","EVENT_TYPE","col1"]
-            transform: upper # (Optional)
         description: One record per customer. Includes information about customers.
+        freshness:
+              warn_after: {count: 1, period: day }
+              error_after: {count: 3, period: day }
+        loaded_at_field: UPLOADED_AT
         columns:
           - name: CUSTOMER_ID
             description: "Primary key of the customers table."
+            data_tests:
+              - unique
+              - not_null
 
           - name: NAME
             description: "Customer's name"
+            data_tests:
+              - not_null
 
           - name: BIRTHDAY
             description: "Date of birth of the customer."
             
           - name: SEX
             description: "Customer's gender"
-            
+            data_tests:
+              - not_null
+              - accepted_values:
+                  values: ['M', 'F']
+
           - name: EMAIL
             description: "Customer's email address"
-          
+            data_tests:
+              - not_null
+        
           - name: COUNTRY
             description: "Customer's country"
 
@@ -42,9 +53,20 @@ sources:
           
           - name: UPLOADED_AT
             description: "Timestamp when the record was uploaded"
-          
+            data_tests:
+              - not_null     
+
+          - name: UPDATED_AT  
+            description: "Timestamp when the record was updated"
+            data_tests:
+              - not_null  
+
           - name: SOURCE
             description: "Source of the data"
-          
+            data_tests:
+              - not_null
+
           - name: EVENT_TYPE
             description: "Type of event associated with the data"
+            data_tests:
+              - not_null

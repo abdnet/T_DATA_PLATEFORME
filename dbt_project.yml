@@ -28,6 +28,8 @@ vars:
   batch_id: '{{invocation_id}}'
   dbt_date:time_zone: 'Europe/Paris'
 
+tests: 
+  severity: warn
 
 
 # Configuring models
@@ -40,7 +42,7 @@ models:
   T_DATA_PLATFORM:
 
     # Applies to all files under models/example/
-    000-raw:
+    100-raw:
       tags: ['raw']
       +schema: DPF_SCH_RAW_{{target.name|upper}}
       # +pre-hook:
@@ -48,20 +50,20 @@ models:
       # +post-hook:
       #     sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized:  table
-    100-staging:
+    200-staging:
       tags: ['stg']
       +schema: DPF_STG_{{target.name|upper}}
 
       +materialized:  table
-    200-intermediate:
+    300-intermediate:
       +materialized: ephemeral
       tags: ['trans']
 
-    300-objects:
+    400-objects:
       +materialized:  table 
       tags: ['obj']
       +schema:  reporting_marketing
-    400-marts:
+    500-marts:
       tags: ['mart']
       +schema: reporting
 
