@@ -1,0 +1,134 @@
+version: 2     
+models:
+  - name: stg_orders
+    description: One record per order. Includes cancelled and deleted orders.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_orders')
+          name: QUALITY_DIM_COMPLETENESS_ORDERS
+          config:
+            severity: warn
+
+    columns:
+      - name: ORDER_ID
+        description: "Primary key of the orders table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_ID
+
+      - name: CUSTOMER_ID
+        description: Foreign key referencing the customer who placed the order
+        data_tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: CUSTOMER_ID
+              name: QUALITY_DIM_INTEGRITY_CUSTOMERS_ORDERS
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_CUSTOMER_ID
+              
+      - name: STORE_ID
+        description: Foreign key referencing the store where the order was placed
+        data_tests:
+          # - relationships:
+          #     to: ref('stg_stores')
+          #     field: STORE_ID
+          #     name: QUALITY_DIM_INTEGRITY_STORES_ORDERS
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_STORE_ID
+              
+      - name: SALESCHANNELID
+        description: Foreign key referencing the sales channel where the order was placed
+        data_tests:
+          # - relationships:
+          #     to: ref('stg_sales_channel')
+          #     field: STORE_ID
+          #     name: QUALITY_DIM_INTEGRITY_SALES_CHANNEL_ORDERS
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNEL_ID      
+
+      - name: ORDER_DATE
+        description: Timestamp when the order was placed
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_ORDERS_ORDER_DATE
+    
+      - name: DELIVERY_DATE
+        description: Timestamp when the order was delivered
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_ORDERS_DELIVERY_DATE
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ORDERS_DELIVERY_DATE
+              expression: ">= ORDER_DATE"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: RETURN_DATE
+        description: Timestamp when the order was returned
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_ORDERS_RETURN_DATE
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ORDERS_DELIVERY_DATE
+              expression: ">= DELIVERY_DATE"
+              config:
+                where: "RETURN_DATE IS NOT NULL"
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: TOTAL_PRICE
+        description: Total price for the order
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [DECIMAL, FLOAT, NUMBER]
+              name: QUALITY_DIM_VALIDITY_ORDERS_TOTAL_PRICE
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ORDERS_TOTAL_PRICE
+              expression: "> 0"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT  
+        description: "Timestamp when the record was updated"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_CUSTOMERS_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_CUSTOMERS_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+
+
+
+    
