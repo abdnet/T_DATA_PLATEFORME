@@ -1,6 +1,7 @@
 {{ config(
     materialized = 'incremental',
     unique_key = 'CUSTOMER_ID',
+    merge_exclude_columns = ['SEX'],
     query_tag = 'dbt_special'
 ) }}
 
@@ -146,13 +147,13 @@ final AS(
             UPDATED_AT,
             SOURCE,
             EVENT_TYPE,
-            TIMESTAMPADD('hour', 9, CURRENT_TIMESTAMP()::TIMESTAMP_NTZ) AS DBT_UPDATED_AT
+            TIMESTAMPADD('hour', 9, CURRENT_TIMESTAMP()::TIMESTAMP_NTZ) AS DBT_UPDATED_DATE
     FROM step__renamed
 )
 
 SELECT * FROM final
 
 {% if is_incremental() %}
-where UPLOADED_AT >= (select COALESCE(max(DBT_UPDATED_AT),'1900-01-01') from {{ this }})   
-OR UPDATED_AT >= (select COALESCE(max(DBT_UPDATED_AT),'1900-01-01') from {{ this }})    
+where UPLOADED_AT >= (select COALESCE(max(DBT_UPDATED_DATE),'1900-01-01') from {{ this }})   
+OR UPDATED_AT >= (select COALESCE(max(DBT_UPDATED_DATE),'1900-01-01') from {{ this }})    
 {% endif %}

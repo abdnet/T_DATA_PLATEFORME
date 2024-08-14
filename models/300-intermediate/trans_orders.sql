@@ -87,3 +87,4 @@ filtered as (
 fianl AS( SELECT * FROM filtered)
 
 SELECT * FROM fianl
+
