@@ -1,0 +1,69 @@
+version: 2
+
+sources:
+  - name: PUBLIC
+    database: MARKETING_TRANSAC_BD
+    description: This is a replica of the data pushed by our API
+    tables:
+      - name: PRODUCTS
+        description: One record per product. Includes details such as category, brand, and pricing.
+        freshness:
+              warn_after: {count: 1, period: day}
+              error_after: {count: 3, period: day}
+        loaded_at_field: UPLOADED_AT
+        columns:
+          - name: ID
+            description: Primary key of the products table
+            data_tests:
+              - unique
+              - not_null
+
+          - name: PRODUCT_ID
+            description: Unique identifier for the product
+            data_tests:
+              - unique
+              - not_null
+              
+          - name: NAME
+            description: Name of the product
+            data_tests:
+              - not_null
+
+          - name: CATEGORY
+            description: The main category of the product
+            data_tests:
+              - not_null
+
+          - name: SUB_CATEGORY
+            description: The sub-category of the product
+
+          - name: BRAND
+            description: The brand of the product
+            data_tests:
+              - not_null
+
+          - name: COLOR
+            description: The color of the product
+
+          - name: SIZE
+            description: The size of the product
+
+          - name: UNIT_PRICE
+            description: The unit price of the product
+            data_tests:
+              - not_null
+
+          - name: UPLOADED_AT
+            description: "Timestamp when the record was uploaded"
+            data_tests:
+              - not_null
+
+          - name: SOURCE
+            description: "Source of the data"
+            data_tests:
+              - not_null
+
+          - name: EVENT_TYPE
+            description: "Type of event associated with the data"
+            data_tests:
+              - not_null
