@@ -46,7 +46,9 @@ sources:
 
           - name: DATE_RETURN
             description: Timestamp when the order was returned
-
+            data_tests:
+              - not_null
+              
           - name: TOTAL_PRICE
             description: Total price for the order
             data_tests:

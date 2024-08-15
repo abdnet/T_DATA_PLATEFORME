@@ -6,59 +6,40 @@ sources:
     description: This is a replica of the data pushed by our api 
     # schema: PUBLIC
     tables:
-      - name: CUSTOMERS
-        description: One record per customer. Includes information about customers.
+      - name: ITEMS
+        description: One record per item. Includes information about items.
         freshness:
               warn_after: {count: 1, period: day }
               error_after: {count: 3, period: day }
         loaded_at_field: UPLOADED_AT
         columns:
-          - name: CUSTOMER_ID
-            description: "Primary key of the customers table."
+          - name: ITEM_ID
+            description: "Primary key of the items table."
             data_tests:
               - unique
               - not_null
 
-          - name: NAME
-            description: "Customer's name"
+          - name: ORDER_ID
+            description: Foreign key referencing the order linked to the item
             data_tests:
               - not_null
 
-          - name: BIRTHDAY
-            description: "Date of birth of the customer."
-            
-          - name: SEX
-            description: "Customer's gender"
-            data_tests:
-              - not_null
-              - accepted_values:
-                  values: ['M', 'F']
-
-          - name: EMAIL
-            description: "Customer's email address"
-            data_tests:
-              - not_null
-        
-          - name: COUNTRY
-            description: "Customer's country"
+          - name: PRODUCT_ID
+            description: Foreign key referencing the product attached to the item
             data_tests:
               - not_null
 
-          - name: REGION
-            description: "Customer's region"
+          - name: SUPPLIER_ID
+            description: Foreign key referencing the supplier that deliver the item
+            data_tests:
+              - not_null       
+
+          - name: QUANTITY
+            description: "Item's quantity"
             data_tests:
               - not_null
 
-          - name: CITY
-            description: "Customer's city"
-            data_tests:
-              - not_null
-
-          - name: POSTAL_CODE
-            description: "Customer's postal code"
-            data_tests:
-              - not_null
-              
+          
           - name: UPLOADED_AT
             description: "Timestamp when the record was uploaded"
             data_tests:

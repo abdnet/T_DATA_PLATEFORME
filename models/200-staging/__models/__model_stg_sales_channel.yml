@@ -1,0 +1,100 @@
+version: 2
+
+models:
+  - name: stg_sales_channels
+    description: One record per sales channel. Includes information about sales channels.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_sales_channels')
+          name: QUALITY_DIM_COMPLETENESS_SALES_CHANNELS
+          config:
+            severity: warn
+
+    columns:
+      - name: ID
+        description: "Primary key of the sales channels table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_ID
+
+      - name: SALESCHANNELID
+        description: "Sales Channel ID."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_SALESCHANNELID
+
+      - name: NAME
+        description: "Name of the sales channel."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_NAME
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              max_value: 100
+              strictly: false
+              name: QUALITY_DIM_CONFORMITY_SALES_CHANNELS_NAME
+
+      - name: DESCRIPTION
+        description: "Description of the sales channel."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_DESCRIPTION
+
+      - name: IS_ACTIVE
+        description: "Indicates if the sales channel is active (true/false)."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_IS_ACTIVE
+
+      - name: CREATED_AT
+        description: "Timestamp when the sales channel was created."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_CREATED_AT
+
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_SALES_CHANNELS_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT  
+        description: "Timestamp when the record was updated."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_SALES_CHANNELS_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: SOURCE
+        description: "Source system of the sales channel record."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_SOURCE
+
+      - name: EVENT_TYPE
+        description: "Type of event associated with the sales channel."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_SALES_CHANNELS_EVENT_TYPE
