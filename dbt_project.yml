@@ -28,8 +28,7 @@ vars:
   batch_id: '{{invocation_id}}'
   dbt_date:time_zone: 'Europe/Paris'
 
-tests: 
-  severity: warn
+
 
 
 # Configuring models
@@ -50,11 +49,12 @@ models:
       # +post-hook:
       #     sql: '{{start__end__monitoring_local("END",this)}}'
       +materialized:  table
+
     200-staging:
       tags: ['stg']
       +schema: DPF_STG_{{target.name|upper}}
-
       +materialized:  table
+    
     300-intermediate:
       +materialized: ephemeral
       tags: ['trans']
@@ -63,12 +63,13 @@ models:
       +materialized:  table 
       tags: ['obj']
       +schema:  reporting_marketing
+
     500-marts:
       tags: ['mart']
       +schema: reporting
-
       +materialized: table
+
   elementary:
-    +schema: "audit_DPF"
+    +schema: audit_DPF
 
 

@@ -1,8 +1,6 @@
 {{ config(
     materialized = 'incremental',
-    unique_key = 'CUSTOMER_ID',
-    merge_exclude_columns = ['SEX'],
-    query_tag = 'dbt_special'
+    unique_key = 'CUSTOMER_ID'
 ) }}
 
 
@@ -78,7 +76,7 @@ step__standardized AS(
             LOWER(ID) AS ID,
             LOWER(CUSTOMER_ID) AS CUSTOMER_ID,
             INITCAP(NAME) AS NAME,
-            SEX,
+            UPPER(SEX) AS SEX,
             LOWER(EMAIL) AS EMAIL,
             INITCAP(COUNTRY) AS COUNTRY,
             INITCAP(REGION) AS REGION,
@@ -114,20 +112,20 @@ step__converted AS (
 
 step__renamed AS (
         SELECT
-            ID,
-            CUSTOMER_ID,
-            NAME,
-            SEX,
-            EMAIL,
-            COUNTRY,
-            REGION,
-            CITY,
-            POSTAL_CODE,
-            BIRTHDAY,
-            UPLOADED_AT,
-            UPDATED_AT,
-            SOURCE,
-            EVENT_TYPE
+            ID  AS ID,
+            CUSTOMER_ID  AS CUSTOMER_ID,
+            NAME  AS NAME,
+            SEX  AS SEX,
+            EMAIL  AS EMAIL,
+            COUNTRY  AS COUNTRY,
+            REGION  AS REGION,
+            CITY  AS CITY,
+            POSTAL_CODE  AS POSTAL_CODE,
+            BIRTHDAY  AS BIRTHDAY,
+            UPLOADED_AT  AS UPLOADED_AT,
+            UPDATED_AT  AS UPDATED_AT,
+            SOURCE  AS SOURCE,
+            EVENT_TYPE AS EVENT_TYPE
         FROM step__converted
 ),
 

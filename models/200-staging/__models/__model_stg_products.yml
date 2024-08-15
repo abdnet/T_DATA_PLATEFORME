@@ -1,0 +1,109 @@
+version: 2     
+models:
+  - name: stg_products
+    description: One record per product. Includes information about products.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_products')
+          name: QUALITY_DIM_COMPLETENESS_PRODUCTS
+          config:
+            severity: warn
+
+    columns:
+      - name: ID
+        description: "Primary key of the products table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_ID
+
+      - name: PRODUCT_ID
+        description: "Product identifier used across different systems."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_PRODUCT_ID
+
+      - name: NAME
+        description: "Name of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_NAME
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              max_value: 100
+              strictly: false
+              name: QUALITY_DIM_CONFORMITY_PRODUCTS_NAME
+
+      - name: CATEGORY
+        description: "Category of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_CATEGORY
+
+      - name: SUB_CATEGORY
+        description: "Sub-category of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_SUB_CATEGORY
+
+      - name: BRAND
+        description: "Brand of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_BRAND
+
+      - name: COLOR
+        description: "Color of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_COLOR
+
+      - name: SIZE
+        description: "Size of the product."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_SIZE
+
+      - name: UNIT_PRICE
+        description: "Price of the product per unit."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: NUMERIC
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_UNIT_PRICE
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0.01
+              name: QUALITY_DIM_CONFORMITY_PRODUCTS_UNIT_PRICE
+
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_PRODUCTS_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT
+        description: "Timestamp when the record was updated."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_PRODUCTS_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_PRODUCTS_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"

@@ -1,4 +1,3 @@
-
 {% macro mirror_raw(source_name, table_name, exclude_columns=[]) %}
     {%- set source_ref = source(source_name, table_name) -%}
 
@@ -9,7 +8,7 @@
         {%- for column in columns %}
             {{ column }}{{ "," if not loop.last }}
         {%- endfor %}
-        FROM {{ source_ref }}
+        FROM {{ source_ref}}
     )
 
     SELECT
