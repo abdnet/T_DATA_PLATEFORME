@@ -1,0 +1,92 @@
+version: 2     
+models:
+  - name: stg_stores
+    description: One record per store. Includes information about stores.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_stores')
+          name: QUALITY_DIM_COMPLETENESS_STORES
+          config:
+            severity: warn
+
+    columns:
+      - name: STORE_ID
+        description: "Primary key of the stores table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_STORES_ID
+      
+      - name: NAME
+        description: "Store's name"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_STORES_NAME
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              max_value: 100 # (Optional)
+              strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
+              name: QUALITY_DIM_CONFORMITY_STORES_NAME
+      
+      - name: PHONE
+        description: "Phone of the store."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_STORES_PHONE
+      
+      - name: EMAIL
+        description: "Store's email address"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_match_regex:
+              regex: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'
+              name: QUALITY_DIM_VALIDITY_STORES_EMAIL
+      
+      - name: ADRESS
+        description: "ADDRESS of the store."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_STORES_ADRESS
+
+      - name: COUNTRY
+        description: "Store's country"
+
+      - name: REGION
+        description: "Store's region"
+
+      - name: CITY
+        description: "Store's city"
+      
+      - name: POSTAL_CODE
+        description: "Store's postal code"
+      
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_STORES_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_STORES_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT  
+        description: "Timestamp when the record was updated"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_STORES_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_STORES_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+          

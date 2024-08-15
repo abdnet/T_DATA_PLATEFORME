@@ -1,0 +1,83 @@
+version: 2     
+models:
+  - name: stg_items
+    description: One record per store. Includes information about items.
+    data_tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_items')
+          name: QUALITY_DIM_COMPLETENESS_ITEMS
+          config:
+            severity: warn
+
+    columns:
+      - name: ITEM_ID
+        description: "Primary key of the items table."
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+              name: QUALITY_DIM_VALIDITY_ITEMS_ID
+
+      - name: ORDER_ID
+        description: Foreign key referencing the order linked to the item
+        data_tests:
+          - relationships:
+              to: ref('stg_orders')
+              field: ORDER_ID
+              name: QUALITY_DIM_INTEGRITY_ORDERS_ITEMS        
+      
+      - name: PRODUCT_ID
+        description: Foreign key referencing the product linked to the item
+        data_tests:
+          - relationships:
+              to: ref('stg_products')
+              field: PRODUCT_ID
+              name: QUALITY_DIM_INTEGRITY_PRODUCTS_ITEMS
+
+      # - name: SUPPLIER_ID
+      #   description: Foreign key referencing the supplier that provide the item
+      #   data_tests:
+      #     - relationships:
+      #         to: ref('stg_suppliers')
+      #         field: SUPPLIER_ID
+      #         name: QUALITY_DIM_INTEGRITY_SUPPLIERS_ITEMS        
+
+      - name: ITEM_QUANTITY
+        description: "Item's quantity"
+        data_tests:
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ITEMS_QUANTITY
+              expression: ">= 0"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"    
+      
+      - name: UPLOADED_AT
+        description: "Timestamp when the record was uploaded"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_ITEMS_UPLOADED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ITEMS_UPLOADED_AT
+              expression: "<= UPDATED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+      - name: UPDATED_AT  
+        description: "Timestamp when the record was updated"
+        data_tests:
+          - dbt_expectations.expect_column_values_to_be_in_type_list:
+              column_type_list: [date, datetime, TIMESTAMP_NTZ]
+              name: QUALITY_DIM_VALIDITY_ITEMS_UPDATED_AT
+          - dbt_utils.expression_is_true:
+              name: QUALITY_CONSISTENCY_ITEMS_UPDATED_AT
+              expression: ">= UPLOADED_AT"
+              config:
+                severity: error
+                error_if: ">10"
+                warn_if: ">2"
+
+          

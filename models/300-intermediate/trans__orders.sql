@@ -1,46 +1,52 @@
+{% set order_source = ref('order_history') %}
+{% set customer_source = ref('trans__customers') %}
+{% set store_source = ref('stg_stores') %}
+{% set sales_channel_source = ref('stg_sales_channel') %}
+
 WITH source AS (
-    SELECT {{ dbt_utils.star(ref("stg_orders")) }}
-    FROM {{ ref('stg_orders') }}
+    SELECT {{ dbt_utils.star(order_source) }}
+    FROM {{ order_source }}
 ),
 
 customer AS (
-    SELECT CUSTOMER_ID AS CUSTOMER
-    FROM {{ ref('in_customers') }}
+    SELECT CUSTOMER_ID AS CUSTOMER 
+    FROM {{ customer_source }}
 ),
+
 sale_channel AS (
-    SELECT UUID_STRING() AS SALE_CHANNEL
-    FROM TABLE(GENERATOR(ROWCOUNT => 20))
+    SELECT SALES_CHANNEL_ID AS SALES_CHANNEL 
+    FROM {{ sales_channel_source }}
 ),
 
 store AS (
-    SELECT UUID_STRING() AS STORE
-    FROM TABLE(GENERATOR(ROWCOUNT => 20))
+    SELECT STORE_ID AS STORE
+    FROM {{ store_source }}
 
 ),
 
 step__validate_customer AS (
-        SELECT {{ dbt_utils.star(ref("stg_orders")) }},
+        SELECT {{ dbt_utils.star(order_source) }},
         CASE 
             WHEN c.CUSTOMER IS NOT NULL THEN true
             ELSE false
         END AS CUSTOMER_ID_VALIDITY
-    FROM source AS o
-    LEFT JOIN customer c ON o.CUSTOMER_ID = c.CUSTOMER
+    FROM source AS s
+    LEFT JOIN customer c ON s.CUSTOMER_ID = c.CUSTOMER
 ),
 
 step__validate_SALESCHANNEL AS (
-        SELECT {{ dbt_utils.star(ref("stg_orders")) }},
+        SELECT {{ dbt_utils.star(order_source) }},
         CUSTOMER_ID_VALIDITY,
         CASE 
-            WHEN c.SALE_CHANNEL IS NOT NULL THEN true
+            WHEN c.SALES_CHANNEL IS NOT NULL THEN true
             ELSE false
         END AS SALE_CHANNEL_ID_VALIDITY
     FROM step__validate_customer AS o
-    LEFT JOIN sale_channel c ON o.SALES_CHANNEL_ID = c.SALE_CHANNEL
+    LEFT JOIN sale_channel c ON o.SALES_CHANNEL_ID = c.SALES_CHANNEL
 ),
 
 step__validate_STORE AS (
-        SELECT {{ dbt_utils.star(ref("stg_orders")) }},
+        SELECT {{ dbt_utils.star(order_source) }},
         CUSTOMER_ID_VALIDITY,
         SALE_CHANNEL_ID_VALIDITY,
         CASE 
