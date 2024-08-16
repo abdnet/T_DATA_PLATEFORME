@@ -1,6 +1,6 @@
 {{ config(
     materialized = 'incremental',
-    unique_key = 'SALESCHANNELID',
+    unique_key = 'SALES_CHANNEL_ID',
     query_tag = 'dbt_special'
 ) }}
 
