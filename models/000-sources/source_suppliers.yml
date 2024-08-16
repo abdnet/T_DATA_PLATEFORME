@@ -1,0 +1,85 @@
+version: 2
+
+sources:
+  - name: PUBLIC
+    database: MARKETING_TRANSAC_BD
+    description: This is a replica of the data pushed by our api 
+    # schema: PUBLIC
+    tables:
+      - name: SUPPLIERS
+        description: One record per supplier. Includes information about suppliers.
+        freshness:
+              warn_after: {count: 1, period: day }
+              error_after: {count: 3, period: day }
+        loaded_at_field: UPLOADED_AT
+        columns:
+          - name: SUPPLIER_ID
+            description: "Primary key of the suppliers table."
+            data_tests:
+              - unique
+              - not_null
+
+          - name: NAME
+            description: "Supplier's name"
+            data_tests:
+              - not_null
+
+          - name: COBTACT_NAME
+            description: "Supplier's contact name"
+            data_tests:
+              - not_null
+          
+          - name: PHONE
+            description: "Supplier's phone"
+            data_tests:
+              - not_null
+
+          - name: EMAIL
+            description: "Supplier's email address"
+            data_tests:
+              - not_null
+        
+          - name: Adress
+            description: "Supplier's country"
+            data_tests:
+              - not_null
+
+          - name: COUNTRY
+            description: "Supplier's country"
+            data_tests:
+              - not_null
+
+          - name: REGION
+            description: "Supplier's region"
+            data_tests:
+              - not_null
+
+          - name: CITY
+            description: "Supplier's city"
+            data_tests:
+              - not_null
+
+          - name: POSTAL_CODE
+            description: "Supplier's postal code"
+            data_tests:
+              - not_null
+
+          - name: UPLOADED_AT
+            description: "Timestamp when the record was uploaded"
+            data_tests:
+              - not_null     
+
+          - name: UPDATED_AT  
+            description: "Timestamp when the record was updated"
+            data_tests:
+              - not_null  
+
+          - name: SOURCE
+            description: "Source of the data"
+            data_tests:
+              - not_null
+
+          - name: EVENT_TYPE
+            description: "Type of event associated with the data"
+            data_tests:
+              - not_null
