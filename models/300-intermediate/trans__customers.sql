@@ -13,8 +13,8 @@ ref_country AS (
 -- Transformation
 step__calculate_new_fields AS ( -- REF = [RG_001, RG_004]
     SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"]) }},
-           split_part(CUSTOMER_NAME, ' ', 0) AS FIRST_NAME,
-           split_part(CUSTOMER_NAME, ' ', 1) AS LAST_NAME,
+           split_part(CUSTOMER_NAME, ' ', 1) AS FIRST_NAME,
+           split_part(CUSTOMER_NAME, ' ', 2) AS LAST_NAME,
            r.alpha_2 AS COUNTRY_CODE,
            FLOOR(DATEDIFF(DAY, BIRTHDAY, CURRENT_DATE) / 365.25) AS AGE
 
