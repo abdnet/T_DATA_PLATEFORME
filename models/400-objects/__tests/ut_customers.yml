@@ -1,0 +1,14 @@
+unit_tests:
+  - name: test_name_split_and_age_calculation_with_france
+    model: trans__customers
+    given:
+      - input: ref('stg_customers')
+        rows:
+          - {ID: '1d30686f-649c-4c8c-90e2-fb14cd140d59', CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d59', NAME: 'John Doe', BIRTHDAY: '1990-01-01', COUNTRY: 'France'}
+          - {ID: '1d30686f-649c-4c8c-90e2-fb14cd140d60', CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d60', NAME: 'Jane Smith', BIRTHDAY: '1985-05-15', COUNTRY: 'France'}
+          - {ID: '1d30686f-649c-4c8c-90e2-fb14cd140d61', CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d61', NAME: 'Alice Johnson', BIRTHDAY: '1992-08-25', COUNTRY: 'France'}
+    expect:
+      rows:
+          - {CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d59', FIRST_NAME: 'John', LAST_NAME: 'Doe', AGE: 34, COUNTRY_CODE: 'FR'}
+          - {CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d60', FIRST_NAME: 'Jane', LAST_NAME: 'Smith', AGE: 39, COUNTRY_CODE: 'FR'}
+          - {CUSTOMER_ID: '1d30686f-649c-4c8c-90e2-fb14cd140d61', FIRST_NAME: 'Alice', LAST_NAME: 'Johnson', AGE: 31, COUNTRY_CODE: 'FR'}
