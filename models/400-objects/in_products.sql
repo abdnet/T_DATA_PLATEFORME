@@ -1,5 +1,3 @@
-
-
 WITH source AS (
     SELECT  
             ID,
@@ -13,7 +11,6 @@ WITH source AS (
             UNIT_PRICE
 FROM {{ ref('trans__products') }}
 )
-
 
     SELECT  
             ID,

@@ -1,5 +1,3 @@
-
-
 WITH source AS (
     SELECT  
             ID,
@@ -15,9 +13,8 @@ WITH source AS (
             REGION,
             CITY,
             POSTAL_CODE
-FROM {{ ref('trans__customers') }}
+    FROM {{ ref('trans__customers') }}
 )
-
 
     SELECT  
             ID,
@@ -33,4 +30,4 @@ FROM {{ ref('trans__customers') }}
             REGION,
             CITY,
             POSTAL_CODE
-        FROM source
+    FROM source
