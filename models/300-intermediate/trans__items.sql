@@ -17,8 +17,6 @@ product AS (
     FROM {{ product_source }}
 ),
 
-
-
 step__validate_order AS (
         SELECT {{ dbt_utils.star(item_source) }},
         CASE 
@@ -39,8 +37,6 @@ step__validate_product AS (
     FROM step__validate_order AS o
     LEFT JOIN product p ON o.PRODUCT_ID = p.PRODUCT
 ),
-
-
 
 -- Final data output
 final AS (
