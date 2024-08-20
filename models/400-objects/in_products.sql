@@ -8,7 +8,9 @@ WITH source AS (
             BRAND,
             COLOR,
             SIZE,
-            UNIT_PRICE
+            UNIT_PRICE,
+            UPLOADED_AT,
+            UPDATED_AT
 FROM {{ ref('trans__products') }}
 )
 
@@ -21,5 +23,7 @@ FROM {{ ref('trans__products') }}
             BRAND,
             COLOR,
             SIZE,
-            UNIT_PRICE
+            UNIT_PRICE,
+            UPLOADED_AT,
+            UPDATED_AT
         FROM source
