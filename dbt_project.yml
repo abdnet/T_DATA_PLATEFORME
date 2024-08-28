@@ -63,13 +63,8 @@ models:
       +materialized:  table 
       tags: ['obj']
       +schema:  reporting_marketing
-    
-    500-mwarehouse!:
-      tags: ['warehouse']
-      +schema: reporting
-      +materialized: table
 
-    600-marts:
+    500-marts:
       tags: ['mart']
       +schema: reporting
       +materialized: table

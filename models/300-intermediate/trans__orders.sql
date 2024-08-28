@@ -40,7 +40,7 @@ step__validate_SALESCHANNEL AS (
         CASE 
             WHEN c.SALES_CHANNEL IS NOT NULL THEN true
             ELSE false
-        END AS SALES_CHANNEL_ID_VALIDITY
+        END AS SALE_CHANNEL_ID_VALIDITY
     FROM step__validate_customer AS o
     LEFT JOIN sale_channel c ON o.SALES_CHANNEL_ID = c.SALES_CHANNEL
 ),
@@ -48,7 +48,7 @@ step__validate_SALESCHANNEL AS (
 step__validate_STORE AS (
         SELECT {{ dbt_utils.star(order_source) }},
         CUSTOMER_ID_VALIDITY,
-        SALES_CHANNEL_ID_VALIDITY,
+        SALE_CHANNEL_ID_VALIDITY,
         CASE 
             WHEN c.STORE IS NOT NULL THEN true
             ELSE false
