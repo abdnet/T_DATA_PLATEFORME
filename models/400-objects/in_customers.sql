@@ -12,7 +12,9 @@ WITH source AS (
             COUNTRY_CODE,
             REGION,
             CITY,
-            POSTAL_CODE
+            POSTAL_CODE,
+            UPLOADED_AT,
+            UPDATED_AT
     FROM {{ ref('trans__customers') }}
 )
 
@@ -29,5 +31,7 @@ WITH source AS (
             COUNTRY_CODE,
             REGION,
             CITY,
-            POSTAL_CODE
+            POSTAL_CODE,
+            UPLOADED_AT,
+            UPDATED_AT
     FROM source
