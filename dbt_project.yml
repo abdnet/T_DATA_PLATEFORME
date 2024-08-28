@@ -42,8 +42,8 @@ models:
 
     # Applies to all files under models/example/
     100-raw:
-      tags: ['raw']
-      +schema: DPF_SCH_RAW_{{target.name|upper}}
+      tags: ['RAW']
+      +schema: DPF_SCH_RAW
       # +pre-hook:
       #   sql: '{{start__end__monitoring_local("START",this)}}'
       # +post-hook:
@@ -51,30 +51,28 @@ models:
       +materialized:  table
 
     200-staging:
-      tags: ['stg']
-      +schema: DPF_STG_{{target.name|upper}}
+      tags: ['STG']
+      +schema: DPF_SCH_STG
       +materialized:  table
     
     300-intermediate:
-      +materialized: table
-      tags: ['trans']
+      +materialized: ephemeral
+      tags: ['TRANS']
 
     400-objects:
       +materialized:  table 
-      tags: ['obj']
-      +schema:  reporting_marketing
-    
-    500-mwarehouse!:
-      tags: ['warehouse']
-      +schema: reporting
-      +materialized: table
+      tags: ['IN_WH']
+      +schema:  DPF_SCH_IN_WH
 
+    500-warehouse:
+      +materialized:  table 
+      tags: ['WH']
+      +schema:  DPF_SCH_WH
+      
     600-marts:
-      tags: ['mart']
-      +schema: reporting
+      tags: ['MART']
+      +schema: DPF_SCH_MART
       +materialized: table
 
-  elementary:
-    +schema: audit_DPF
-
-
+seeds:
+    +schema: DPF_SCH_RAW

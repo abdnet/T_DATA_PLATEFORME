@@ -5,6 +5,7 @@
 WITH source AS (
     SELECT {{ dbt_utils.star(item_source) }}
     FROM {{ item_source }}
+    WHERE DBT_VALID_TO IS NULL
 ),
 
 order_s AS (

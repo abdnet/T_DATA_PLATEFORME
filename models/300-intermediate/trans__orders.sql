@@ -6,6 +6,8 @@
 WITH source AS (
     SELECT {{ dbt_utils.star(order_source) }}
     FROM {{ order_source }}
+    WHERE DBT_VALID_TO IS NULL
+
 ),
 
 customer AS (
