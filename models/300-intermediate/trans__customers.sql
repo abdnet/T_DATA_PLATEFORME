@@ -1,14 +1,15 @@
 -- Source
 WITH src_customers AS (
-    SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"])  }}, NAME AS CUSTOMER_NAME FROM {{ref("customer_history")}} WHERE DBT_VALID_TO IS NULL
+    SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"])  }},
+            NAME AS CUSTOMER_NAME 
+    FROM {{ref("customer_history")}} 
+    WHERE DBT_VALID_TO IS NULL
 ),
 
-src_orders AS (
-    SELECT {{ get_columns_by_relation(ref("order_history")) }} FROM {{ref("order_history")}} WHERE DBT_VALID_TO IS NULL
-),
 -- Referential
 ref_country AS (
-    SELECT {{ get_columns_by_relation(ref("country_ref")) }} FROM {{ref("country_ref")}}
+    SELECT {{ get_columns_by_relation(ref("country_ref")) }} 
+    FROM {{ref("country_ref")}}
 ),
 -- Transformation
 step__calculate_new_fields AS ( -- REF = [RG_001, RG_004]

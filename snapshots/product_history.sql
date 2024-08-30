@@ -2,7 +2,7 @@
 
 {{
     config(
-      target_schema='DPF_STG_SNAPSHOT_DEV',  
+      target_schema='DPF_SCH_SNAPSHOT',  
       unique_key='PRODUCT_ID',  
       strategy='check',  
       check_cols=['UNIT_PRICE']
