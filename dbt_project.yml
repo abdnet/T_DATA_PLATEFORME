@@ -65,14 +65,14 @@ models:
       +schema:  DPF_SCH_IN_WH
 
     500-warehouse:
-      +materialized:  table 
+      +materialized:  incremental 
       tags: ['WH']
       +schema:  DPF_SCH_WH
       
     600-marts:
       tags: ['MART']
       +schema: DPF_SCH_MART
-      +materialized: table
+      +materialized: incremental
 
 seeds:
     +schema: DPF_SCH_RAW
