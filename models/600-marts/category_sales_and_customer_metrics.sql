@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 -- Ce modèle agrège les données de ventes en regroupant par date et catégorie de produit.
 -- Il calcule des KPI clés, y compris les ventes totales, les retours, et les statistiques sur les clients nouveaux et existants.
 -- Il fournit également les pourcentages de nouveaux clients et de clients existants par rapport au total des clients.

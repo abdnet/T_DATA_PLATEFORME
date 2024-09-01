@@ -1,3 +1,7 @@
+{{ config(
+    tags=["PIPELINE_CUSTOMER"]
+) }}
+
 -- Source
 WITH src_customers AS (
     SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"])  }},

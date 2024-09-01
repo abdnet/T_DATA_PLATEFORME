@@ -1,4 +1,6 @@
-{{ config(materialized='table') }}
+{{ config(
+    tags=["PIPELINE_CUSTOMER"]
+) }}
 
 SELECT
     {{ dbt_utils.generate_surrogate_key(['ID', 'CUSTOMER_ID']) }} AS ID,
