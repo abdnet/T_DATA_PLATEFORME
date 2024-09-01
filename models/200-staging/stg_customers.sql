@@ -1,6 +1,7 @@
 {{ config(
     materialized = 'incremental',
-    unique_key = 'CUSTOMER_ID'
+    unique_key = 'CUSTOMER_ID',
+    tags=["PIPELINE_CUSTOMER"]
 ) }}
 
 

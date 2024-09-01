@@ -1,3 +1,7 @@
+{{ config(
+    tags=["PIPELINE_CUSTOMER"]
+) }}
+
 WITH source AS (
     SELECT  
             ID,
