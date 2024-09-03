@@ -27,7 +27,7 @@ elementary:
       database: "{{ env_var('DBT_DATABASE') }}"
       warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
       # schema: "{{ env_var('DBT_SCHEMA') }}"
-      threads: "{{ env_var('DBT_THREADS') |as_number }}"
+      #threads: "{{ env_var('DBT_THREADS') |as_number }}"
       client_session_keep_alive: "{{ env_var('DBT_CLIENT_SESSION_KEEP_ALIVE') |as_bool}}"
       query_tag: "{{ env_var('DBT_QUERY_TAG') }}"
       schema: "audit_DPF"

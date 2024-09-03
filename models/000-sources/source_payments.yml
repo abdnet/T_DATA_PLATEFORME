@@ -1,0 +1,75 @@
+version: 2
+
+sources:
+  - name: PUBLIC
+    database: MARKETING_TRANSAC_BD
+    description: This is a replica of the data pushed by our api 
+    # schema: PUBLIC
+    tables:
+      - name: PAYMENTS
+        description: One record per payment.
+        freshness:
+              warn_after: {count: 1, period: day }
+              error_after: {count: 3, period: day }
+        loaded_at_field: UPLOADED_AT
+        columns:
+          - name: PAYMENT_ID
+            description: The unique identifier of the payment table*
+            data_tests:
+              - unique
+              - not_null
+
+          - name: ORDER_ID
+            description: Foreign key referencing the payment associated with the order
+            data_tests:
+              - not_null
+
+          - name: AMOUNT
+            description: The amount of the payment
+            data_tests:
+              - not_null
+              
+          - name: PAYMENT_METHOD
+            description: The method of payment (e.g., credit card, PayPal)
+            data_tests:
+              - not_null
+              
+          - name: PAYMENT_STATUS
+            description: The status of the payment (e.g., pending, completed, failed)
+            data_tests:
+              - not_null
+
+          - name: TRANSACTION_ID
+            description: The transaction ID from the payment gateway
+            data_tests:
+              - not_null
+
+          - name: CREATED_AT
+            description: The timestamp when the payment was created
+            data_tests:
+              - not_null
+
+          - name: PAYMENT_UPDATED_AT
+            description: The timestamp when the payment was last updated
+            data_tests:
+              - not_null
+
+          - name: UPLOADED_AT
+            description: "Timestamp when the record was uploaded"
+            data_tests:
+              - not_null     
+
+          - name: UPDATED_AT  
+            description: "Timestamp when the record was updated"
+            data_tests:
+              - not_null  
+
+          - name: SOURCE
+            description: "Source of the data"
+            data_tests:
+              - not_null
+
+          - name: EVENT_TYPE
+            description: "Type of event associated with the data"
+            data_tests:
+              - not_null

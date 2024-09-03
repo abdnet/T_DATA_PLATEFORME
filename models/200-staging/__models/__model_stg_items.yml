@@ -33,13 +33,13 @@ models:
               field: PRODUCT_ID
               name: QUALITY_DIM_INTEGRITY_PRODUCTS_ITEMS
 
-      # - name: SUPPLIER_ID
-      #   description: Foreign key referencing the supplier that provide the item
-      #   data_tests:
-      #     - relationships:
-      #         to: ref('stg_suppliers')
-      #         field: SUPPLIER_ID
-      #         name: QUALITY_DIM_INTEGRITY_SUPPLIERS_ITEMS        
+      - name: SUPPLIER_ID
+        description: Foreign key referencing the supplier that provide the item
+        data_tests:
+          - relationships:
+              to: ref('stg_suppliers')
+              field: SUPPLIER_ID
+              name: QUALITY_DIM_INTEGRITY_SUPPLIERS_ITEMS        
 
       - name: ITEM_QUANTITY
         description: "Item's quantity"
