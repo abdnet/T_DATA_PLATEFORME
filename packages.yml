@@ -1,10 +1,18 @@
 packages:
   - package: dbt-labs/dbt_utils
     version: 1.2.0  # Consider using the latest patch version (e.g., ^1.0.3)
-  # - package: dbt-labs/audit_helper
-  #   version: ^0.13.0  # Major update for dbt 1.0+ compatibility
+  
   - package: calogica/dbt_expectations
     version: 0.10.3
+  
+  - package: elementary-data/elementary
+    version: 0.16.1
+
+  - package: dbt-labs/codegen
+    version: 0.12.1
+
+  # - package: dbt-labs/audit_helper
+  #   version: ^0.13.0  # Major update for dbt 1.0+ compatibility  
   # - package: EqualExperts/dbt_unit_testing
   #   version: ^0.3.1  # Potential updates for dbt 1.8 compatibility
   # - package: dbt-labs/codegen
@@ -14,5 +22,4 @@ packages:
 
   # - package: dbt-labs/dbt_project_evaluator
   #   version: 0.12.2
-  # - package: elementary-data/elementary
-  #   version: 0.16.0
+  

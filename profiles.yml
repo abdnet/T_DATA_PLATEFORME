@@ -5,12 +5,13 @@ T_DATA_PLATFORM:
       type: snowflake
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
+      #password: 'H8MZRqa8gEe/kvHzvJ+Giq94DuCYoQXmfbb$Xl'
       private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
       private_key_passphrase: "{{env_var('DBT_PRIVATE_KEY_PASSPHRASE')}}"
       role: "{{ env_var('DBT_ROLE') }}"
       database: "{{ env_var('DBT_DATABASE') }}"
       warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
-      schema: "{{ env_var('DBT_SCHEMA') }}"
+      schema: elementary
       threads: "{{ env_var('DBT_THREADS') |as_number }}"
       client_session_keep_alive: "{{ env_var('DBT_CLIENT_SESSION_KEEP_ALIVE') |as_bool}}"
       query_tag: "{{ env_var('DBT_QUERY_TAG') }}"
@@ -18,17 +19,12 @@ T_DATA_PLATFORM:
 elementary:
   outputs:
     default:
-      type: snowflake
-      account: "{{ env_var('DBT_ACCOUNT') }}"
-      user: "{{ env_var('DBT_USER') }}"
-      private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
-      private_key_passphrase: "{{env_var('DBT_PRIVATE_KEY_PASSPHRASE')}}"
-      role: "{{ env_var('DBT_ROLE') }}"
-      database: "{{ env_var('DBT_DATABASE') }}"
-      warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
-      # schema: "{{ env_var('DBT_SCHEMA') }}"
-      #threads: "{{ env_var('DBT_THREADS') |as_number }}"
-      client_session_keep_alive: "{{ env_var('DBT_CLIENT_SESSION_KEEP_ALIVE') |as_bool}}"
-      query_tag: "{{ env_var('DBT_QUERY_TAG') }}"
-      schema: "audit_DPF"
+      type: "snowflake"
+      account: "WZKXPNH-WH96764"
+      user: "USR_DPF_DBT_SRV_DEV"
+      password: 'H8MZRqa8gEe/kvHzvJ+Giq94DuCYoQXmfbb$Xl'
+      role: "RL_DPF_RW_ALL_DEV"
+      warehouse: "COMPUTE_WH"
+      database: "MARKETING_DEV"
+      schema: "ELEMENTARY"
       threads: 10

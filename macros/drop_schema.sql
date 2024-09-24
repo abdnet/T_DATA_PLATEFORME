@@ -8,7 +8,7 @@ DROP SCHEMA IF EXISTS {{ schema_name }} CASCADE;
 
 {% macro drop_table(table_name) %}
 {% set sql %}
-DROP TABLE IF EXISTS {{ ref(table_name) }};
+DROP TABLE IF EXISTS {{ ref('table_name') }};
 {% endset %}
 
 {{ run_query(sql) }}
