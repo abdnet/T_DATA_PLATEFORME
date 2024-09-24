@@ -74,5 +74,9 @@ models:
       +schema: DPF_SCH_MART
       +materialized: incremental
 
+    elementary:
+      tags: ['ELEMENTARY_DATA_OBSERVABILITY']   
+      +schema: elementary  
+
 seeds:
     +schema: DPF_SCH_RAW

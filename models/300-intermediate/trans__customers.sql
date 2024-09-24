@@ -16,7 +16,7 @@ ref_country AS (
     FROM {{ref("country_ref")}}
 ),
 -- Transformation
-step__calculate_new_fields AS ( -- REF = [RG_001, RG_004]
+step__calculate_new_fields AS ( -- REF = [RG_001, RG_004, RG-005]
     SELECT {{ get_columns_by_relation(ref("customer_history"), ["NAME"]) }},
            split_part(CUSTOMER_NAME, ' ', 1) AS FIRST_NAME,
            split_part(CUSTOMER_NAME, ' ', 2) AS LAST_NAME,
