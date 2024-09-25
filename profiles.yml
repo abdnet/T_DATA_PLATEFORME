@@ -5,9 +5,9 @@ T_DATA_PLATFORM:
       type: snowflake
       account: "{{ env_var('DBT_ACCOUNT') }}"
       user: "{{ env_var('DBT_USER') }}"
-      #password: 'H8MZRqa8gEe/kvHzvJ+Giq94DuCYoQXmfbb$Xl'
-      private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
-      private_key_passphrase: "{{env_var('DBT_PRIVATE_KEY_PASSPHRASE')}}"
+      password: 'H8MZRqa8gEe/kvHzvJ+Giq94DuCYoQXmfbb$Xl'
+      #private_key_path: "{{ env_var('DBT_PRIVATE_KEY_PATH') }}"
+      #private_key_passphrase: "{{env_var('DBT_PRIVATE_KEY_PASSPHRASE')}}"
       role: "{{ env_var('DBT_ROLE') }}"
       database: "{{ env_var('DBT_DATABASE') }}"
       warehouse: "{{ env_var('DBT_WAREHOUSE') }}"
