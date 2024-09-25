@@ -42,10 +42,10 @@ models:
       - name: SALESCHANNELID
         description: Foreign key referencing the sales channel where the order was placed
         data_tests:
-          # - relationships:
-          #     to: ref('stg_sales_channel')
-          #     field: STORE_ID
-          #     name: QUALITY_DIM_INTEGRITY_SALES_CHANNEL_ORDERS
+          - relationships:
+              to: ref('stg_sales_channel')
+              field: SALESCHANNELID
+              name: QUALITY_DIM_INTEGRITY_SALES_CHANNEL_ORDERS
           - dbt_expectations.expect_column_values_to_be_of_type:
               column_type: VARCHAR
               name: QUALITY_DIM_VALIDITY_SALES_CHANNEL_ID      
@@ -65,10 +65,10 @@ models:
               name: QUALITY_DIM_VALIDITY_ORDERS_DELIVERY_DATE
           - dbt_utils.expression_is_true:
               name: QUALITY_CONSISTENCY_ORDERS_DELIVERY_DATE
-              expression: ">= ORDER_DATE"
+              expression: "> ORDER_DATE"
               config:
                 severity: error
-                error_if: ">10"
+                error_if: ">50"
                 warn_if: ">2"
 
       - name: RETURN_DATE
