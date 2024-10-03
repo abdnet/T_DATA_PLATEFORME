@@ -107,17 +107,17 @@ step__converted AS (
 
 step__renamed as (
     SELECT 
-            ID ,
-            PRODUCT_ID ,
+            ID,
+            PRODUCT_ID,
             NAME,
-            CATEGORY  ,
-            SUB_CATEGORY ,
-            BRAND ,
-            COLOR ,
-            SIZE ,
-            UNIT_PRICE ,
-            UPLOADED_AT ,
-            SOURCE ,
+            CATEGORY,
+            SUB_CATEGORY,
+            BRAND,
+            COLOR,
+            SIZE,
+            UNIT_PRICE,
+            UPLOADED_AT,
+            SOURCE,
             EVENT_TYPE,
             UPDATED_AT
     

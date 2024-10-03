@@ -17,17 +17,17 @@ add_or_update_bashrc() {
 }
 
 # Définir les variables d'environnement pour l'environnement de développement (dev)
-add_or_update_bashrc "DBT_ACCOUNT"                  "WZKXPNH-WH96764"
-add_or_update_bashrc "DBT_USER"                     "USR_DPF_DBT_SRV_DEV"
-add_or_update_bashrc "DBT_PRIVATE_KEY_PATH"         "$HOME/secret_key/rsa_key.p8"
-add_or_update_bashrc "DBT_PRIVATE_KEY_PASSPHRASE"   "TdJqYN2445j7"
-add_or_update_bashrc "DBT_ROLE"                     "RL_DPF_RW_ALL_DEV"
-add_or_update_bashrc "DBT_DATABASE"                 "MARKETING_DEV"
-add_or_update_bashrc "DBT_WAREHOUSE"                "COMPUTE_WH"
-add_or_update_bashrc "DBT_SCHEMA"                   "PUBLIC"
-add_or_update_bashrc "DBT_THREADS"                  "10"
-add_or_update_bashrc "DBT_CLIENT_SESSION_KEEP_ALIVE" "False"
-add_or_update_bashrc "DBT_QUERY_TAG"                "DBT_ENV_DEV"
+add_or_update_bashrc "SNOWFLAKE_ACCOUNT"                   "FEGEGTN-VT61244"
+add_or_update_bashrc "SNOWFLAKE_USER"                      "USR_DPF_DBT_SRV_DEV"
+add_or_update_bashrc "SNOWFLAKE_PRIVATE_KEY_PATH"          "$HOME/secret_key/rsa_key.p8"
+add_or_update_bashrc "SNOWFLAKE_PRIVATE_KEY_PASSPHRASE"    "TdJqYN2445j7"
+add_or_update_bashrc "SNOWFLAKE_ROLE"                      "RL_DPF_RW_ALL_DEV"
+add_or_update_bashrc "SNOWFLAKE_DATABASE"                  "MARKETING_DEV"
+add_or_update_bashrc "SNOWFLAKE_WAREHOUSE"                 "COMPUTE_WH"
+add_or_update_bashrc "SNOWFLAKE_SCHEMA"                    "PUBLIC"
+add_or_update_bashrc "SNOWFLAKE_THREADS"                   "10"
+add_or_update_bashrc "SNOWFLAKE_CLIENT_SESSION_KEEP_ALIVE" "False"
+add_or_update_bashrc "SNOWFLAKE_QUERY_TAG"                 "DBT_ENV_DEV"
 
 echo "Variables d'environnement ajoutées au fichier ~/.bashrc."
 

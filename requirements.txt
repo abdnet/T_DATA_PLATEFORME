@@ -1,3 +1,12 @@
-dbt-core
-dbt-snowflake
-more-itertools
+# Core dbt package
+dbt-core>=1.6.0,<2.0.0
+
+# Database adapter (adjust based on your needs)
+dbt-postgres>=1.6.0,<2.0.0
+# dbt-redshift>=1.6.0,<2.0.0
+# dbt-snowflake>=1.6.0,<2.0.0
+# dbt-bigquery>=1.6.0,<2.0.0
+# dbt-spark>=1.6.0,<2.0.0
+
+# Additional useful packages
+dbt-common>=1.8.0,<2.0.0

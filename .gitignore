@@ -4,3 +4,5 @@ dbt_packages/
 logs/
 edr_target
 .vscode
+.pyc
+.dat
