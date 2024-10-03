@@ -6,3 +6,5 @@ edr_target
 .vscode
 .pyc
 .dat
+dbt_venv/
+.vscode/
