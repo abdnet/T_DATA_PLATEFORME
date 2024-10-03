@@ -2,9 +2,9 @@
 target/
 dbt_packages/
 logs/
+dbt_venv/
+.vscode/
 edr_target
 .vscode
 .pyc
 .dat
-dbt_venv/
-.vscode/
